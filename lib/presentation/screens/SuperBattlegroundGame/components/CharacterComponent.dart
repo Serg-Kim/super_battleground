@@ -19,8 +19,6 @@ var player;
 
   @override
   Future<void> onLoad() async {
-    print(player);
-
     add(CircleHitbox());
     add(TextComponent(text: name));
     add(

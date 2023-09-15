@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:core';
 import 'dart:ffi';
 
+import 'package:flame/components.dart';
 import 'package:json_patch/json_patch.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -125,11 +126,20 @@ class GameConnection {
     state = newState;
   }
 
+  move (Vector2 vec) {
+    channel.sink.add(jsonEncode({
+      "type": "move",
+      "data": {
+        "x": vec.x.toInt(),
+        "y": vec.y.toInt()
+      }
+    }));
+  }
+
   GameConnection connect() {
     channel = WebSocketChannel.connect(
       Uri.parse('ws://192.168.100.22:8080/echo?id=$id&name=$name&character=$character'),
     );
-
     channel.stream.listen((message) {
       var data = json.decode(message);
       if (data.runtimeType == List<dynamic>) {

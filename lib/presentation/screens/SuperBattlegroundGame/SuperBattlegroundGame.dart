@@ -23,6 +23,7 @@ class SuperBattlegroundGame extends FlameGame
     detection system in Flame.
   ''';
 
+  late Vector2 position;
   late CharacterComponent player;
   late Map<String, CharacterComponent> players;
   late final TextComponent componentCounter;
@@ -110,7 +111,8 @@ class SuperBattlegroundGame extends FlameGame
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player?.position += info.delta.game;
+    player.position += info.delta.game;
+    connection.move(player.position);
   }
 
   void increaseScore() {
