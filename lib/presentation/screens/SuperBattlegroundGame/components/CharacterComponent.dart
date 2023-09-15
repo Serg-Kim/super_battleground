@@ -58,9 +58,10 @@ var player;
   late HPBar hpBar;
   late MPBar mpBar;
   String name;
+  String type;
   late String dir;
 
-  CharacterComponent(String this.name)
+  CharacterComponent(String this.name, String this.type)
       : super(
     size: Vector2(50, 75),
     position: Vector2(0, 0),
@@ -102,7 +103,7 @@ var player;
       ),
     );
     animation = await gameRef.loadSpriteAnimation(
-      'king.png',
+      'characters/$type.png',
       SpriteAnimationData.sequenced(
         stepTime: 1,
         amount: 1,

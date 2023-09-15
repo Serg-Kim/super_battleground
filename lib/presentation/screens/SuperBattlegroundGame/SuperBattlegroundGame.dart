@@ -45,12 +45,12 @@ class SuperBattlegroundGame extends FlameGame
   @override
   Future<void> onLoad() async {
     var characterComponents = <String, CharacterComponent>{};
-    connection = GameConnection(id, "test5", "base").connect();
+    connection = GameConnection(id, "test5", "queen").connect();
 
     connection.subscribe((state) => {
       state.players.entries.forEach((ent) {
         if (characterComponents[ent.key].runtimeType == Null) {
-          var character = CharacterComponent(ent.value.name);
+          var character = CharacterComponent(ent.value.name, ent.value.character.type);
           characterComponents[ent.key] = character;
           add(character);
           if (ent.key == id) {
