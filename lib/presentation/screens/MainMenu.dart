@@ -27,13 +27,13 @@ class _MainMenuState extends State<MainMenu> {
         child:Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             const Text('Main Menu', style: TextStyle(
               color: Colors.white,
               fontSize: 38,
             ),),
-            Center(
-              child: Padding(
+               Padding(
                   padding: const EdgeInsets.only(top: 32.0),
                   child: OutlinedButton(onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
@@ -49,7 +49,6 @@ class _MainMenuState extends State<MainMenu> {
                   ),)
                   ),
               ),
-            ),
           ],
         ),
       ),
