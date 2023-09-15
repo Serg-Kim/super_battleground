@@ -29,7 +29,7 @@ class SuperBattlegroundGame extends FlameGame
   late final TextComponent componentCounter;
   late final TextComponent scoreText;
   late final GameConnection connection;
-  final id = "test";
+  final id = "test2";
   int score = 0;
 
   // final cameraComponent = CameraComponent.withFixedResolution(
@@ -45,7 +45,7 @@ class SuperBattlegroundGame extends FlameGame
   @override
   Future<void> onLoad() async {
     var characterComponents = <String, CharacterComponent>{};
-    connection = GameConnection(id, "test1", "base").connect();
+    connection = GameConnection(id, "test4", "base").connect();
 
     connection.subscribe((state) => {
       state.players.entries.forEach((ent) {
@@ -58,6 +58,10 @@ class SuperBattlegroundGame extends FlameGame
             player = character;
 
           }
+          character.hpBar.currentHP = ent.value.character.hp.toDouble();
+          character.hpBar.maxHP = ent.value.character.maxHp.toDouble();
+          character.mpBar.currentMP = ent.value.character.mp.toDouble();
+          character.mpBar.maxMP = ent.value.character.maxMp.toDouble();
         }
 
         characterComponents[ent.key]?.position = Vector2(ent.value.character.x.toDouble(), ent.value.character.y.toDouble());
