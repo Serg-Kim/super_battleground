@@ -7,10 +7,13 @@ class CharacterComponent extends SpriteAnimationComponent
 
 var player;
 
-  CharacterComponent({required this.player})
+  String name;
+
+
+  CharacterComponent(String this.name)
       : super(
     size: Vector2(50, 75),
-    position: Vector2(player["x"].toDouble(), player["y"].toDouble()),
+    position: Vector2(0, 0),
     anchor: Anchor.center,
   );
 
@@ -19,7 +22,7 @@ var player;
     print(player);
 
     add(CircleHitbox());
-    add(TextComponent(text: player["Name"]));
+    add(TextComponent(text: name));
     add(
       bulletCreator = TimerComponent(
         period: 0.05,

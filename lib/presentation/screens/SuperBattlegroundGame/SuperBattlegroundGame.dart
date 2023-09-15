@@ -7,6 +7,7 @@ import 'package:flame/game.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:json_patch/json_patch.dart';
 
+import '../../../online/channel.dart';
 import 'components/BackgroundComponent.dart';
 import 'components/CharacterComponent.dart';
 
@@ -22,9 +23,11 @@ class SuperBattlegroundGame extends FlameGame
     detection system in Flame.
   ''';
 
-  late final CharacterComponent player;
+  late CharacterComponent player;
+  late Map<String, CharacterComponent> players;
   late final TextComponent componentCounter;
   late final TextComponent scoreText;
+  late final GameConnection connection;
   final id = "test";
   int score = 0;
 
@@ -40,25 +43,26 @@ class SuperBattlegroundGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    final channel = WebSocketChannel.connect(
-      Uri.parse('ws://192.168.100.22:8080/echo?id=${id}'),
-    );
+    var characterComponents = <String, CharacterComponent>{};
+    connection = GameConnection(id, "test1", "base").connect();
 
-    channel.stream.listen((message) {
-      var data = json.decode(message);
+    connection.subscribe((state) => {
+      state.players.entries.forEach((ent) {
+        if (characterComponents[ent.key].runtimeType == Null) {
+          var character = CharacterComponent(ent.value.name);
+          characterComponents[ent.key] = character;
+          add(character);
+          if (ent.key == id) {
+            camera.followComponent(character);
+            player = character;
 
-      print(data);
-      if (data.runtimeType == List<dynamic>) {
-        final patches = (data as Iterable).map((e) => e as Map<String, dynamic>);
+          }
+        }
 
-        gameState = JsonPatch.apply(gameState, patches, strict: false);
-
-        add(player = CharacterComponent(player: gameState["players"][this.id]));
-        camera.followComponent(player);
-        return;
-      }
-        gameState = data;
+        characterComponents[ent.key]?.position = Vector2(ent.value.character.x.toDouble(), ent.value.character.y.toDouble());
+      })
     });
+
 
 
     addAll([
@@ -91,22 +95,22 @@ class SuperBattlegroundGame extends FlameGame
 
   @override
   void onPanStart(_) {
-    player.beginFire();
+    player?.beginFire();
   }
 
   @override
   void onPanEnd(_) {
-    player.stopFire();
+    player?.stopFire();
   }
 
   @override
   void onPanCancel() {
-    player.stopFire();
+    player?.stopFire();
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.position += info.delta.game;
+    player?.position += info.delta.game;
   }
 
   void increaseScore() {
