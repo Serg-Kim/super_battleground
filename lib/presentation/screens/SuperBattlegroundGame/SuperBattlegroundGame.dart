@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:json_patch/json_patch.dart';
@@ -17,7 +18,7 @@ class Player {
 }
 
 class SuperBattlegroundGame extends FlameGame
-    with PanDetector, HasCollisionDetection {
+    with PanDetector, HasCollisionDetection, DoubleTapDetector {
   static const String description = '''
     A simple space shooter game used for testing performance of the collision
     detection system in Flame.
@@ -44,6 +45,7 @@ class SuperBattlegroundGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
+    Flame.device.setLandscape();
     var characterComponents = <String, CharacterComponent>{};
     connection = GameConnection(id, "test5", "queen").connect();
 
@@ -76,7 +78,6 @@ class SuperBattlegroundGame extends FlameGame
 
       })
     });
-
 
 
     addAll([
@@ -121,6 +122,11 @@ class SuperBattlegroundGame extends FlameGame
   void onPanCancel() {
     player?.stopFire();
   }
+
+  // @override
+  // void onDoubleTap() {
+  //   player?.fire();
+  // }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {

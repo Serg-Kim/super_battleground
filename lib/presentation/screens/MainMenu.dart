@@ -17,7 +17,14 @@ class _MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Center(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/menu_background.gif"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child:Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -45,6 +52,7 @@ class _MainMenuState extends State<MainMenu> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

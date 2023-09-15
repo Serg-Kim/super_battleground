@@ -4,6 +4,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+import '../../MyGame/components/BulletComponent.dart';
+
 class HPBar extends PositionComponent {
   double maxHP;
   double currentHP;
@@ -115,14 +117,18 @@ var player;
 
   final _bulletAngles = [0.5, 0.3, 0.0, -0.5, -0.3];
   void _createBullet() {
-    // gameRef.addAll(
-    //   _bulletAngles.map(
-    //         (angle) => BulletComponent(
-    //       position: position + Vector2(-5, -size.y / 2),
-    //       angle: angle,
-    //     ),
-    //   ),
-    // );
+    gameRef.addAll(
+      _bulletAngles.map(
+            (angle) => BulletComponent(
+          position: position + Vector2(-5, -size.y / 2),
+          angle: angle,
+        ),
+      ),
+    );
+  }
+
+  void fire() {
+
   }
 
   void beginFire() {
