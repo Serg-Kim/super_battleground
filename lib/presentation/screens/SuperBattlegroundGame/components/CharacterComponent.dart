@@ -58,7 +58,7 @@ var player;
   late HPBar hpBar;
   late MPBar mpBar;
   String name;
-
+  late String dir;
 
   CharacterComponent(String this.name)
       : super(
@@ -69,6 +69,21 @@ var player;
 
   late PolygonComponent hpComponent;
 
+  void setPosition(Vector2 vec) {
+    var difPos = vec - super.position;
+    if (difPos.x > 0 && dir != "R") {
+      super.flipHorizontally();
+      dir = "R";
+    }
+    if (difPos.x < 0 && dir != "L") {
+      super.flipHorizontally();
+      dir = "L";
+    }
+
+    super.position = vec;
+  }
+
+
   @override
   Future<void> onLoad() async {
     Paint grayPaint = Paint()..color = Colors.black;
@@ -76,8 +91,7 @@ var player;
     add(TextComponent(text: name, scale: Vector2(1, 0.8)));
     add(hpBar = HPBar(currentHP: 0, maxHP: 100));
     add(mpBar = MPBar(currentMP: 100, maxMP: 100));
-
-
+    dir = "R";
 
     add(
       bulletCreator = TimerComponent(
@@ -95,6 +109,7 @@ var player;
         textureSize: Vector2(32, 39),
       ),
     );
+
   }
 
   final _bulletAngles = [0.5, 0.3, 0.0, -0.5, -0.3];

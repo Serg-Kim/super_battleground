@@ -63,7 +63,6 @@ class SuperBattlegroundGame extends FlameGame
           character.mpBar.currentMP = ent.value.character.mp.toDouble();
           character.mpBar.maxMP = ent.value.character.maxMp.toDouble();
         }
-
         characterComponents[ent.key]?.position = Vector2(ent.value.character.x.toDouble(), ent.value.character.y.toDouble());
       })
     });
@@ -115,8 +114,9 @@ class SuperBattlegroundGame extends FlameGame
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.position += info.delta.game;
-    connection.move(player.position);
+    var pos = player.position + info.delta.game;
+    connection.move(pos);
+    player.setPosition(pos);
   }
 
   void increaseScore() {
