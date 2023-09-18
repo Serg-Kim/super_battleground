@@ -1,3 +1,4 @@
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:super_battleground/presentation/screens/MainMenu.dart';
 
@@ -10,6 +11,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'SUPER_BATTLEGROUND',

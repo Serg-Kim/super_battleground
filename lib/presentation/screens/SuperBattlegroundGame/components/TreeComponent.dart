@@ -8,7 +8,7 @@ class TreeComponent extends SpriteComponent with HasGameRef {
 
   @override
   Future<void> onLoad() async {
-    add(RectangleHitbox());
+    add(RectangleHitbox()..collisionType = CollisionType.passive);
   }
 
   @override
