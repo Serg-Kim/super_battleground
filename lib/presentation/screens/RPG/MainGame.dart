@@ -1,46 +1,45 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flame_isometric/flame_isometric.dart';
+import 'package:flame_isometric/custom_isometric_tile_map_component.dart';
 
 import '../../../online/channel.dart';
-import 'components/BackgroundComponent.dart';
-import 'components/CharacterComponent.dart';
-import 'components/FireMageCharacterComponent.dart';
-import 'components/WeaponComponent.dart';
+import '../SuperBattlegroundGame/components/CharacterComponent.dart';
+import '../SuperBattlegroundGame/components/FireMageCharacterComponent.dart';
 
-class SuperBattlegroundGame extends FlameGame
-    with PanDetector, HasCollisionDetection, DoubleTapDetector {
-  static const String description = '''
-    A simple space shooter game used for testing performance of the collision
-    detection system in Flame.
-  ''';
-
+class MainGame extends FlameGame with HasGameRef, PanDetector, HasCollisionDetection, DoubleTapDetector {
   late Vector2 position;
   late CharacterComponent player;
   late Map<String, CharacterComponent> players;
-  late final TextComponent componentCounter;
-  late final TextComponent scoreText;
   late final GameConnection connection;
   late Vector2 runVector2;
   final id = "test8";
-  int score = 0;
-
-  // final cameraComponent = CameraComponent.withFixedResolution(
-  //   width: 5000,
-  //   height: 5000,
-  // );
-
-  var gameState;
-
-  @override
-  Color backgroundColor() => const Color(0xFF55C47D);
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
+    final gameSize = gameRef.size;
+
+    final flameIsometric = await FlameIsometric.create(
+        tileMap: ['map/grassland_tiles.png'],
+        tsxList: ['images/map/grassland.tsx'],
+        tmx: 'images/map/grassland_map.tmx'
+    );
+
+    for (var renderLayer in flameIsometric.renderLayerList) {
+      add(
+        CustomIsometricTileMapComponent(
+          renderLayer.spriteSheet,
+          renderLayer.matrix,
+          destTileSize: flameIsometric.srcTileSize,
+          position:
+          Vector2(gameSize.x / 2, flameIsometric.tileHeight.toDouble()),
+        ),
+      );
+    }
+
     Flame.device.setLandscape();
     var characterComponents = <String, CharacterComponent>{};
     runVector2 = Vector2(0,0);
@@ -59,6 +58,7 @@ class SuperBattlegroundGame extends FlameGame
       state.players.entries.forEach((ent) {
         if (characterComponents[ent.key].runtimeType == Null) {
           var character = FireMageCharacterComponent(ent.value.name);
+          connection.move(character.position = Vector2(300, 300));
 
           characterComponents[ent.key] = character;
           add(character);
@@ -80,37 +80,16 @@ class SuperBattlegroundGame extends FlameGame
           characterComponents[ent.key]?.moveTo(Vector2(
               ent.value.character.x.toDouble(),
               ent.value.character.y.toDouble()));
-          }
+        }
       })
     });
 
 
-    addAll([
-      FpsTextComponent(
-        position: size - Vector2(0, 50),
-        anchor: Anchor.bottomRight,
-      ),
-      scoreText = TextComponent(
-        position: size - Vector2(0, 25),
-        anchor: Anchor.bottomRight,
-        priority: 1,
-      ),
-      componentCounter = TextComponent(
-        position: size,
-        anchor: Anchor.bottomRight,
-        priority: 1,
-      ),
-    ]);
-
-    // add(EnemyCreator());
-    add(BackgroundCreator());
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    scoreText.text = 'Score: $score';
-    componentCounter.text = 'Components: ${children.length}';
   }
   late TimerComponent runCreator;
   @override
@@ -144,9 +123,9 @@ class SuperBattlegroundGame extends FlameGame
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    double max = 5;
+    double max = 3;
     double sen = 25;
-    var newDeltaVec = (info.delta.game / sen + runVector2) * 2;
+    var newDeltaVec = info.delta.game / sen + runVector2;
     if (newDeltaVec.x > max) {
       newDeltaVec.x = max;
     }
@@ -163,9 +142,5 @@ class SuperBattlegroundGame extends FlameGame
     // var pos = player.position + info.delta.game;
     // connection.move(pos);
     // player.setPosition(pos);
-  }
-
-  void increaseScore() {
-    score++;
   }
 }

@@ -19,7 +19,7 @@ class CharacterComponent extends UnitComponent  {
 
   @override
   Future<void> onLoad() async {
-    add(TextComponent(text: name, scale: Vector2(1, 0.8)));
+    add(TextComponent(text: name, position: Vector2(0, -40)));
     add(hpBar = HPBar(currentHP: 100, maxHP: 100));
     add(mpBar = MPBar(currentMP: 100, maxMP: 100));
     add(weapon);

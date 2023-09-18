@@ -138,7 +138,7 @@ class GameConnection {
 
   GameConnection connect() {
     channel = WebSocketChannel.connect(
-      Uri.parse('ws://192.168.31.176:8080/echo?id=$id&name=$name&character=$character'),
+      Uri.parse('ws://192.168.100.22:8080/echo?id=$id&name=$name&character=$character'),
     );
     channel.stream.listen((message) {
       var data = json.decode(message);
