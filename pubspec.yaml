@@ -38,6 +38,8 @@ dependencies:
   flame: 1.8.2
   web_socket_channel: 2.4.0
   json_patch: 3.0.0
+  flame_isometric: 0.4.2
+  flame_tiled: 1.13.0
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +74,8 @@ flutter:
   assets:
     - assets/images/
     - assets/images/characters/
+    - assets/images/characters/shadow_girl/
+    - assets/images/map/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

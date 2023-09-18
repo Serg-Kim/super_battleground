@@ -7,6 +7,7 @@ class BulletComponent extends SpriteAnimationComponent
     with HasGameRef, CollisionCallbacks {
   static const speed = 500.0;
   late final Vector2 velocity;
+  late final Vector2 initPos;
   final Vector2 deltaPosition = Vector2.zero();
 
   BulletComponent({required super.position, super.angle})
@@ -14,6 +15,7 @@ class BulletComponent extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
+    initPos = Vector2(super.position.x, super.position.y);
     add(CircleHitbox());
     animation = await gameRef.loadSpriteAnimation(
       'bullet.png',
@@ -48,9 +50,8 @@ class BulletComponent extends SpriteAnimationComponent
       ..scale(dt);
     position += deltaPosition;
 
-    if (position.y < 0 ||
-        position.x > gameRef.size.x ||
-        position.x + size.x < 0) {
+    double range = (initPos - position).length2;
+    if (range > 200000) {
       removeFromParent();
     }
   }

@@ -4,6 +4,7 @@ import 'package:super_battleground/presentation/screens/SuperBattlegroundGame/Su
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'MyGame/MyGame.dart';
+import 'RPG/MainGame.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key});
@@ -37,7 +38,7 @@ class _MainMenuState extends State<MainMenu> {
                   padding: const EdgeInsets.only(top: 32.0),
                   child: OutlinedButton(onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => GameWidget(game: SuperBattlegroundGame()),
+                      builder: (context) => GameWidget(game: MainGame()),
                     ),
                   ),
                       style: OutlinedButton.styleFrom(
